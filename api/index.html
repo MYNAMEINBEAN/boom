@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hyperbeam Session Creator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #response {
+            white-space: pre-wrap;
+            background: #eee;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hyperbeam Session Creator</h1>
+    <div id="response">Loading...</div>
+
+    <script>
+        async function createSession() {
+            try {
+                const response = await fetch("/api/index.js", { method: 'POST' });
+                const data = await response.json();
+                const responseDiv = document.getElementById("response");
+
+                if (response.ok) {
+                    responseDiv.textContent = `Session created!\nID: ${data.id}\nLink: ${data.url}`;
+                } else {
+                    responseDiv.textContent = `Error creating session: ${data.error || "Unknown error"}`;
+                }
+            } catch (error) {
+                document.getElementById("response").textContent = `Request failed: ${error.message}`;
+            }
+        }
+
+        window.onload = createSession;
+    </script>
+</body>
+</html>
